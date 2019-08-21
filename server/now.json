@@ -3,6 +3,21 @@
     "version": 2,
     "env": {
       "DATABASE_URL": "@guest_map_database_url"
-    },"builds": [{ "src": "src/*index.js", "use": "@now/node-server" }]
+    },
+    "builds": [
+      { "src": "src/*server.js", "use": "@now/node-server" }
+    ],
+    "routes": [
+      {
+        "src": "/",
+        "dest": "src/server.js",
+        "methods": ["GET"]
+      },
+      {
+        "src": "/api/v1/messages",
+        "dest": "src/api/messages.js",
+        "methods": ["GET"]
+      }
+    ]
     
 }
