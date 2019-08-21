@@ -1,0 +1,8 @@
+{
+    "name": "messages-api",
+    "version": 2,
+    "env": {
+      "DATABASE_URL": "@guest_map_database_url"
+    },"builds": [{ "src": "src/*index.js", "use": "@now/node-server" }]
+    
+}
