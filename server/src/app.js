@@ -1,18 +1,24 @@
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
+var cors = require('cors');
 
 const app = express();
 
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(express.json()); 
-
+app.use(cors());
 
 
 
 require('dotenv').config();
-
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-type');
+  next();
+});
 
 
 
@@ -23,12 +29,7 @@ const api = require('./api');
 
 
 
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', "*");
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-type');
-  next();
-});
+
 
 app.get('/', (req, res) => {
   res.json({

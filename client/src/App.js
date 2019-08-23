@@ -49,7 +49,13 @@ class App extends Component {
 
   componentDidMount(){
 
-    fetch(API_URL)
+    fetch(API_URL,{
+      mode: 'no-cors',
+      headers: {
+        
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
       .then(res => res.json())
       .then(messages => {
 
@@ -76,6 +82,9 @@ class App extends Component {
           messages       
         });
       })
+      .catch(function () {
+        console.log("Promise Rejected");
+      });
 
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
@@ -104,6 +113,9 @@ class App extends Component {
           zoom: 13
           
         });
+      })
+      .catch(function () {
+        console.log("Promise Rejected");
       });
     })
   }
@@ -129,15 +141,20 @@ class App extends Component {
       });
 
       fetch(API_URL, {
+        mode: 'no-cors',
         method: 'POST',
         headers: {
           'content-type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         },
         body: JSON.stringify({
           name: this.state.userMessage.name,
           message: this.state.userMessage.message,
           latitude: this.state.location.lat,
           longitude: this.state.location.lng
+        })
+        .catch(function () {
+          console.log("Promise Rejected");
         })
       })
       .then(res => res.json())
@@ -151,6 +168,9 @@ class App extends Component {
           })
         }, 4000);
         
+      })
+      .catch(function () {
+        console.log("Promise Rejected");
       });
         
     }
