@@ -10,28 +10,12 @@ app.use(helmet());
 app.use(express.json()); 
 app.use(cors());
 
-
-
 require('dotenv').config();
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', "*");
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-type');
-  next();
-});
-
-
 
 const middlewares = require('./middlewares');
 const api = require('./api');
 
-
-
-
-
-
-
-app.get('/', (req, res) => {
+app.get('/', function(req,res){
   res.json({
     message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
   });

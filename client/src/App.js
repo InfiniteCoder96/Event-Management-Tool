@@ -49,34 +49,34 @@ class App extends Component {
 
   componentDidMount(){
 
-    fetch(API_URL,{
-      mode: 'no-cors',
+    fetch('https://cors-anywhere.herokuapp.com/' + API_URL,{
+      
       headers: {
-        
+        'content-type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       }
     })
-      .then(res => res.json())
-      .then(messages => {
+    .then(res => res.json())
+    .then(messages => {
 
-        const haveSeenLocation = {};
+      const haveSeenLocation = {};
 
-        messages = messages.reduce((all, message) => {
+      messages = messages.reduce((all, message) => {
 
-          const key = `${message.latitude}${message.longitude}`;
+        const key = `${message.latitude}${message.longitude}`;
 
-          if(haveSeenLocation[key]){
-            haveSeenLocation[key].otherMessages = haveSeenLocation[key].otherMessages || [];
-            haveSeenLocation[key].otherMessages.push(message);
+        if(haveSeenLocation[key]){
+          haveSeenLocation[key].otherMessages = haveSeenLocation[key].otherMessages || [];
+          haveSeenLocation[key].otherMessages.push(message);
             
-          }
-          else{
-            haveSeenLocation[key] = message;
-            all.push(message);
-          }
+        }
+        else{
+          haveSeenLocation[key] = message;
+          all.push(message);
+        }
 
-          return all;
-        }, []);
+        return all;
+      }, []);
 
         this.setState({
           messages       
@@ -140,8 +140,8 @@ class App extends Component {
          sendingMessage: true 
       });
 
-      fetch(API_URL, {
-        mode: 'no-cors',
+      fetch('https://cors-anywhere.herokuapp.com/' + API_URL, {
+        
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -153,9 +153,7 @@ class App extends Component {
           latitude: this.state.location.lat,
           longitude: this.state.location.lng
         })
-        .catch(function () {
-          console.log("Promise Rejected");
-        })
+        
       })
       .then(res => res.json())
       .then(message => {

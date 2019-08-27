@@ -5,17 +5,21 @@
       "DATABASE_URL": "@guest_map_database_url"
     },
     "builds": [
+      { "src": "/src/index.js", "use": "@now/node" },
       { "src": "/src/api/index.js", "use": "@now/node" },
-      { "src": "/src/api/messages.js", "use": "@now/node" }
+      { "src": "/src/api/export.js", "use": "@now/node" }
     ],
     "routes": [
       {
-        "src": "/api/v1/(.*)", "dest": "/src/api/index.js",
-        "headers": {"cache-control": "s-maxage=1000"}
+        "src": "/", "dest": "/src/index.js"
+        
       },
       {
-        "src": "/api/v1/messages(.*)", "dest": "/src/api/messages.js",
-        "headers": {"cache-control": "s-maxage=1000"}
+        "src": "/api/v1", "dest": "/src/api/index.js"
+        
+      },
+      {
+        "src": "/api/v1/(.*)", "dest": "/src/api/export.js"
       }
     ]
     
