@@ -186,7 +186,7 @@ class App extends Component {
         
       })
       .catch(function () {
-        console.log("Promise Rejected");
+        console.log("Promise");
       });
         
     }
