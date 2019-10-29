@@ -1,8 +1,10 @@
 const express = require('express');
 const Joi = require('joi');
-const db = require('../database');
+const bodyparser = require('body-parser');
 
-const messages = db.get('messages');
+require('../database');
+
+const Message = require('../message');
 
 const schema = Joi.object().keys({
     name: Joi.string().regex(/^[a-zA-Z0-9 ]{3,30}$/).required(),
@@ -16,7 +18,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   try{
 
-    messages
+    Message
     .find()
     .then(allMessages => {
       res.json(allMessages);
@@ -30,31 +32,22 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res, next) => {
   
-  const result = Joi.validate(req.body, schema);
-
-  if(result.error === null){
     // add current date time
     // insert into DB
-    const { name, message, latitude, longitude } = req.body;
+    
 
     const userMessage = {
-      name,
-      message,
-      latitude,
-      longitude,
+      name: req.body.name,
+      message: req.body.message,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
       date: new Date()
-    };
+    }
 
-    messages
-    .insert(userMessage)
-    .then(insertedMessage => {
-      res.json(insertedMessage);
-    });
-  }
-  else{
-    next(result.error);
-  }
-  
+  new Message(userMessage).save().then(insertedMessage => {
+    res.json(insertedMessage);
+  });
+
 });
 
 module.exports = router;

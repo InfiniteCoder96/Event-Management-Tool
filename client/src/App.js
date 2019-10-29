@@ -25,7 +25,7 @@ var usersIcons = L.icon({
 
 const schema = Joi.object().keys({
   name: Joi.string().min(3).max(30).required(),
-  message: Joi.string().min(10).max(30).required()
+  message: Joi.string().min(3).max(30).required()
 });
 
 const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:5000/api/v1/messages' : 'https://guestmapapi.inofinitylabs.com/api/v1/messages';
@@ -144,8 +144,7 @@ class App extends Component {
         
         method: 'POST',
         headers: {
-          'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'content-type': 'application/json'
         },
         body: JSON.stringify({
           name: this.state.userMessage.name,

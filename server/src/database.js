@@ -1,6 +1,9 @@
-const monk = require('monk');
+const mongoose = require('mongoose');
 
-require('dotenv').config();
-const db = monk(process.env.DATABASE_URL);
+// Map global mongoose 
+mongoose.Promise = global.Promise;
 
-module.exports = db;
+// Mongoose connect
+mongoose.connect('mongodb+srv://pasindu:KBtkrOC6uM2hFCI0@cluster0-bgpuf.mongodb.net/guestmap?retryWrites=true&w=majority')
+.then(() => console.log('MongoDb Connected'))
+.catch(err => console.log(err));

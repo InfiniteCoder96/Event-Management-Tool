@@ -1,8 +1,20 @@
 const express = require('express');
+const app = express();
+const bodyparser = require('body-parser');
+const cors = require('cors');
+
+// boady parser middleware
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended: false}));
+
+// enable cors
+app.use(cors());
+
+
 const messagesRouter = require('./messages');
 const api = require('./index');
 
-const app = express();
+
 
 app.use('/api/v1/',api);
 
