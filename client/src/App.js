@@ -138,6 +138,12 @@ class App extends Component {
     });
   }
 
+  _closeMessageBox = () => {
+    this.setState({
+      messageBoxOpen: false
+    });
+  }
+
   formIsValid = () => {
     const userMessage = {
       name: this.state.userMessage.name,
@@ -179,9 +185,11 @@ class App extends Component {
         setTimeout(() => {
           this.setState({
             sendingMessage: false,
-            sentMessage: true,
-            messageBoxOpen: false
+            sentMessage: true
+            
           })
+
+          this.componentDidMount();
         }, 4000);
         
       })
@@ -243,13 +251,21 @@ class App extends Component {
         </Map>
 
         { this.state.isUserOnMobile && !this.state.messageBoxOpen ?
-          <Button className="message-btn" type="button" color="danger" onClick={this._showMessageBox}>Send a message</Button>
+          <Button className="message-btn" type="button" color="danger" onClick={this._showMessageBox}>Say Hi !!!</Button>
 
             : 
 
             <Card body inverse className="message-form">
-            <CardTitle>Welcome to Inofinity Labs GuestM.app !</CardTitle>
-            <CardText>Leave a message with your location...</CardText>
+              
+              <CardTitle>Welcome to Inofinity Labs GuestM.app !
+              { this.state.isUserOnMobile ? 
+                <Button onClick={this._closeMessageBox} close />
+                : ''
+              }
+              </CardTitle>
+              <CardText>Leave a message with your location...</CardText>
+
+              
             
             { !this.state.sendingMessage && !this.state.sentMessage && this.state.haveUsersLocation ? 
             <Form onSubmit={this.formSubmitted}>
@@ -272,12 +288,20 @@ class App extends Component {
                   placeholder="Enter a message" />
               </FormGroup>
               <Button type="submit" color="info" block disabled={!this.formIsValid()}>Send</Button>
+                { this.state.isUserOnMobile ? 
+                  <Button type="button" color="danger" onClick={this._closeMessageBox} block>Cancel</Button> 
+                  : ''
+                }
+               
             </Form>
             :
             this.state.sendingMessage || !this.state.haveUsersLocation ?
               <img src={loading} alt="Loading..."/>
               : <Alert color="success">Success ! Thanks for your support</Alert>
+              
             }
+
+            
           </Card>
         }
         
