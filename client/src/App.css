@@ -21,3 +21,11 @@ body{
     border-color: violet;
     border-style: solid 2px;
 }
+
+.message-btn{
+    z-index: 999;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+}

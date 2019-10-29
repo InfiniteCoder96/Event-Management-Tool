@@ -44,10 +44,15 @@ class App extends Component {
     },
     sendingMessage: false,
     sentMessage: false,
-    messages: []
+    messages: [],
+    isUserOnMobile: false,
+    messageBoxOpen: false
   }
 
   componentDidMount(){
+
+    window.addEventListener("resize", this.resize.bind(this));
+    this.resize();
 
     fetch('https://cors-anywhere.herokuapp.com/' + API_URL,{
       
@@ -120,6 +125,19 @@ class App extends Component {
     })
   }
 
+  resize() {
+    let currentlyOnMobile = (window.innerWidth <= 760);
+    if (currentlyOnMobile !== this.state.isUserOnMobile) {
+        this.setState({isUserOnMobile: currentlyOnMobile});
+    }
+  }
+
+  _showMessageBox = () => {
+    this.setState({
+      messageBoxOpen: true
+    });
+  }
+
   formIsValid = () => {
     const userMessage = {
       name: this.state.userMessage.name,
@@ -161,7 +179,8 @@ class App extends Component {
         setTimeout(() => {
           this.setState({
             sendingMessage: false,
-            sentMessage: true
+            sentMessage: true,
+            messageBoxOpen: false
           })
         }, 4000);
         
@@ -222,38 +241,46 @@ class App extends Component {
           ))}
           
         </Map>
-        <Card body inverse className="message-form">
-          <CardTitle>Welcome to Inofinity Labs GuestM.app !</CardTitle>
-          <CardText>Leave a message with your location...</CardText>
-          
-          { !this.state.sendingMessage && !this.state.sentMessage && this.state.haveUsersLocation ? 
-          <Form onSubmit={this.formSubmitted}>
-            <FormGroup>
-              <Label for="Name">Name</Label>
-              <Input 
-                onChange={this.valueChanged}
-                type="text" 
-                name="name" 
-                id="name" 
-                placeholder="Enter your name" />
-            </FormGroup>
-            <FormGroup>
-              <Label for="Message">Message</Label>
-              <Input 
-                onChange={this.valueChanged}
-                type="textarea" 
-                name="message" 
-                id="message" 
-                placeholder="Enter a message" />
-            </FormGroup>
-            <Button type="submit" color="info" block disabled={!this.formIsValid()}>Send</Button>
-          </Form>
-          :
-          this.state.sendingMessage || !this.state.haveUsersLocation ?
-            <img src={loading} alt="Loading..."/>
-            : <Alert color="success">Success ! Thanks for your support</Alert>
-          }
-        </Card>
+
+        { this.state.isUserOnMobile && !this.state.messageBoxOpen ?
+          <Button className="message-btn" type="button" color="danger" onClick={this._showMessageBox}>Send a message</Button>
+
+            : 
+
+            <Card body inverse className="message-form">
+            <CardTitle>Welcome to Inofinity Labs GuestM.app !</CardTitle>
+            <CardText>Leave a message with your location...</CardText>
+            
+            { !this.state.sendingMessage && !this.state.sentMessage && this.state.haveUsersLocation ? 
+            <Form onSubmit={this.formSubmitted}>
+              <FormGroup>
+                <Label for="Name">Name</Label>
+                <Input 
+                  onChange={this.valueChanged}
+                  type="text" 
+                  name="name" 
+                  id="name" 
+                  placeholder="Enter your name" />
+              </FormGroup>
+              <FormGroup>
+                <Label for="Message">Message</Label>
+                <Input 
+                  onChange={this.valueChanged}
+                  type="textarea" 
+                  name="message" 
+                  id="message" 
+                  placeholder="Enter a message" />
+              </FormGroup>
+              <Button type="submit" color="info" block disabled={!this.formIsValid()}>Send</Button>
+            </Form>
+            :
+            this.state.sendingMessage || !this.state.haveUsersLocation ?
+              <img src={loading} alt="Loading..."/>
+              : <Alert color="success">Success ! Thanks for your support</Alert>
+            }
+          </Card>
+        }
+        
       </div>
     );
   }
